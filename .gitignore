@@ -1,0 +1,34 @@
+# Credentials and Secrets
+credentials/
+gcp-accounts/
+credentials.json
+*.json
+!package.json
+!tsconfig.json
+.env
+.env.*
+!.env.example
+
+# Local data / DB / Vector stores / Backups
+data/
+open-webui-data/
+*.tar.gz
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log

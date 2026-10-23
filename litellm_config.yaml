@@ -1,0 +1,214 @@
+model_list:
+  # Gemini 3.1 Pro Preview - slower, higher quality, deep reasoning
+  - model_name: gemini-3.1-pro-preview
+    litellm_params:
+      model: vertex_ai/gemini-3.1-pro-preview
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+      tools:
+        - googleSearch: {}
+
+  # Gemini 3.8 Flash - fast, daily use
+  - model_name: gemini-3.8-flash
+    litellm_params:
+      model: vertex_ai/gemini-3.8-flash
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+      tools:
+        - googleSearch: {}
+
+  # Gemini 4 Argon
+  - model_name: gemini-4-argon
+    litellm_params:
+      model: vertex_ai/gemini-4-argon
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  # Zhipu AI GLM-5.2 (Vertex AI MaaS - 1M context, advanced coding & reasoning)
+  - model_name: glm-5.2
+    litellm_params:
+      model: vertex_ai/zai-org/glm-5.2-maas
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  # Google Imagen 3 (image generation)
+  # NOTE: Image generation requires custom Vertex AI endpoint deployment
+  # LiteLLM doesn't support built-in Imagen through standard chat API
+  # To use: Deploy custom Imagen endpoint in Vertex AI and update model_name below
+  # - model_name: imagen-3
+  #   litellm_params:
+  #     model: vertex_ai/projects/{project_id}/locations/{location}/endpoints/{endpoint_id}
+  #     vertex_project: "os.environ/GCP_PROJECT_ID"
+  #     vertex_location: "global"
+
+  # Google Embedding model for RAG (replaces local sentence-transformers)
+  - model_name: text-embedding-004
+    litellm_params:
+      model: vertex_ai/text-embedding-004
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  # ---------------------------------------------------------------------------
+  # Mistral AI Models
+  # ---------------------------------------------------------------------------
+
+  # Codestral 2508 - Specialized in code, software development, refactoring (256k context)
+  - model_name: codestral-2508
+    litellm_params:
+      model: mistral/codestral-2508
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  # Ministral 14B - General Mistral model (reasoning, analysis, instructions)
+  - model_name: ministral-14b-latest
+    litellm_params:
+      model: mistral/ministral-14b-latest
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  - model_name: ministral-14b
+    litellm_params:
+      model: mistral/ministral-14b-latest
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  # Codestral Embed - Embeddings model specialized in code and technical documentation (1536 dim)
+  - model_name: codestral-embed
+    litellm_params:
+      model: mistral/codestral-embed
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  # Mistral Embed - Embeddings model for text and general RAG documents (1024 dim)
+  - model_name: mistral-embed
+    litellm_params:
+      model: mistral/mistral-embed
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  # GLM-5-2 (Mistral AI) - Ready for when enabled on the account
+  # - model_name: glm-5-2
+  #   litellm_params:
+  #     model: mistral/glm-5-2
+  #     api_key: "os.environ/MISTRAL_API_KEY"
+
+  # ---------------------------------------------------------------------------
+  # OpenRouter Free Models
+  # ---------------------------------------------------------------------------
+
+  # --- 1. CODING MODELS (Specialized in code writing, refactoring, agentic tool use) ---
+
+  # Cohere North Mini Code (Free) - #1 free coding model (30B MoE, 256k context, chain-of-thought)
+  # Alias for Roo Code, Cline and IDE extensions
+  - model_name: cohere/north-mini-code:free
+    litellm_params:
+      model: openrouter/cohere/north-mini-code:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # Nex AGI Nex-N2.5-Pro (Free) - Advanced agentic model for codebase exploration and multi-file coding (262k context)
+  # Alias for Roo Code / Cline
+  - model_name: nex-agi/nex-n2.5-pro:free
+    litellm_params:
+      model: openrouter/nex-agi/nex-n2.5-pro:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # --- 2. GENERAL PURPOSE MODELS (Daily conversations, summaries, multimodal text+vision) ---
+
+  # inclusionAI Ling 3.0 Flash VL (Free) - Multimodal (text+vision) MoE 124B, fast (2-3s), 262k context
+  # Alias for Roo Code / Cline
+  - model_name: inclusionai/ling-3.0-flash-vl:free
+    litellm_params:
+      model: openrouter/inclusionai/ling-3.0-flash-vl:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # OpenRouter Free Auto-Router - Automatically selects the best available free model (Fail-safe router, 200k context)
+  # Direct alias 'openrouter/free'
+  - model_name: openrouter/free
+    litellm_params:
+      model: openrouter/openrouter/free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # --- 3. ARCHITECTURE & REASONING MODELS (System design, diagrams, extensive documentation) ---
+
+  # Dots Studio Dots3-Note Preview (Free) - Massive MoE 280B model (16B active), 512k context, deep reasoning
+  # Direct alias 'dots-studio/dots-3-note-preview:free' for Roo Code / Cline
+  - model_name: dots-studio/dots-3-note-preview:free
+    litellm_params:
+      model: openrouter/dots-studio/dots-3-note-preview:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # ---------------------------------------------------------------------------
+  # NVIDIA Developer NIM Models (integrate.api.nvidia.com)
+  # ---------------------------------------------------------------------------
+
+  # --- 1. CODING MODELS (Software development, fast code generation, refactoring) ---
+
+  # OpenAI GPT-OSS 20B on NVIDIA infrastructure - Ultra-fast model (~0.5s) with reasoning for coding
+  # Alias for Roo Code, Cline and IDE extensions
+  - model_name: openai/gpt-oss-20b
+    litellm_params:
+      model: openai/openai/gpt-oss-20b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  # DeepSeek v4 Flash on NVIDIA GPUs - High-speed coding model with advanced reasoning
+  # Alias for Roo Code / Cline
+  - model_name: deepseek-ai/deepseek-v4-flash-0731
+    litellm_params:
+      model: openai/deepseek-ai/deepseek-v4-flash-0731
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  # --- 2. ARCHITECTURE & SYSTEM DESIGN MODELS (Heavy reasoning, system orchestration) ---
+
+  # NVIDIA Nemotron 3 Ultra 550B - Frontier MoE model (55B active) for advanced reasoning and system architecture
+  # Alias for Roo Code / Cline
+  - model_name: nvidia/nemotron-3-ultra-550b-a55b
+    litellm_params:
+      model: openai/nvidia/nemotron-3-ultra-550b-a55b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  # NVIDIA Nemotron 3 Super 120B - Hybrid MoE 120B model (12B active) optimized for planning and architecture
+  # Alias for Roo Code / Cline
+  - model_name: nvidia/nemotron-3-super-120b-a12b
+    litellm_params:
+      model: openai/nvidia/nemotron-3-super-120b-a12b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  # NVIDIA Nemotron 3 Nano Omni 30B Reasoning - Specialized in fast step-by-step reasoning and sub-agents
+  # Alias for Roo Code / Cline
+  - model_name: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+    litellm_params:
+      model: openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  # --- 3. GENERAL PURPOSE & MULTIMODAL MODELS (Text + Vision, daily conversations) ---
+
+  # Meta LLaMA 3.2 11B Vision Instruct - Official Meta multimodal model (text + images), excellent Romanian support
+  # Alias for Roo Code / Cline
+  - model_name: meta/llama-3.2-11b-vision-instruct
+    litellm_params:
+      model: openai/meta/llama-3.2-11b-vision-instruct
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  # NVIDIA Nemotron 3.5 Lightning 30B - High-throughput general MoE model for fast day-to-day interactions
+  # Alias for Roo Code / Cline
+  - model_name: nvidia/nemotron-3.5-lightning-30b-a3b
+    litellm_params:
+      model: openai/nvidia/nemotron-3.5-lightning-30b-a3b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+
+router_settings:
+  num_retries: 2
+  retry_after: 2
+  timeout: 180
+  model_group_alias:
+    "glm-5.2-maas": "glm-5.2"
+  fallbacks:
+    - {"cohere/north-mini-code:free": ["nex-agi/nex-n2.5-pro:free", "openrouter/free"]}
+    - {"nex-agi/nex-n2.5-pro:free": ["cohere/north-mini-code:free", "openrouter/free"]}
+    - {"inclusionai/ling-3.0-flash-vl:free": ["openrouter/free"]}
