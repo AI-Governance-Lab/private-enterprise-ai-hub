@@ -54,30 +54,36 @@ This repository is not a theoretical tutorial—it is a **live, production-harde
 ### 1. End-to-End Enterprise AI Hub & Dual-Gateway Topology
 
 ```mermaid
-graph TB
-    subgraph Clients["👥 Enterprise & Home LAN Workstations"]
-        Browser["🌐 Web Browsers (All Workstations)\nTeam Chat, Document RAG & CAD Uploads"]
-        IDEs["💻 Developer Workstations & VS Code Web (:9080)\nCline • Roo Code • Aider • Continue"]
+flowchart TB
+    classDef client fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    classDef hub fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
+    classDef proxy fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
+    classDef internal fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
+    classDef cloud fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
+
+    subgraph Clients["Enterprise & Home LAN Workstations"]
+        Browser["Web Browsers (All Workstations)<br/>Team Chat, Document RAG & CAD Uploads"]:::client
+        IDEs["Developer Workstations & VS Code Web (:9080)<br/>Cline • Roo Code • Aider • Continue"]:::client
     end
 
-    subgraph Host["🖥️ Self-Hosted Enterprise AI Server (Linux • Podman/Docker • Systemd Auto-Start)"]
-        WebUI["💬 Open WebUI (:8080)\nMulti-User Chat, RBAC & Workspace Tools"]
-        RAID[("💾 Local RAID-1 Storage\nwebui.db • Private Uploads • Chat History")]
+    subgraph Host["Self-Hosted Enterprise AI Server (Linux • Podman/Docker • Systemd Auto-Start)"]
+        WebUI["Open WebUI (:8080)<br/>Multi-User Chat, RBAC & Workspace Tools"]:::hub
+        RAID[("Local RAID-1 Storage<br/>webui.db • Private Uploads • Chat History")]:::hub
 
-        ProxyChat["🔀 Main LiteLLM Gateway (:4000)\nOpen WebUI Chat • Search Grounding • RAG Embeddings"]
-        ProxyAgents["🤖 Coding Agents LiteLLM Gateway (:4001)\nlitellm-agents • Native Tool-Calling • Zero-Downtime"]
+        ProxyChat["Main LiteLLM Gateway (:4000)<br/>Open WebUI Chat • Search Grounding • RAG Embeddings"]:::proxy
+        ProxyAgents["Coding Agents LiteLLM Gateway (:4001)<br/>litellm-agents • Native Tool-Calling • Zero-Downtime"]:::proxy
 
-        subgraph InternalServices["🛠️ Internal Domain & Document Microservices (private-ai-net)"]
-            Tika["📄 Apache Tika (127.0.0.1:9998)\nOCR & Scanned PDF Extraction"]
-            CAD["📐 cad-service (:8090 internal)\nFastAPI • libredwg • ezdxf • openpyxl"]
+        subgraph InternalServices["Internal Domain & Document Microservices (private-ai-net)"]
+            Tika["Apache Tika (127.0.0.1:9998)<br/>OCR & Scanned PDF Extraction"]:::internal
+            CAD["cad-service (:8090 internal)<br/>FastAPI • libredwg • ezdxf • openpyxl"]:::internal
         end
     end
 
-    subgraph CloudProviders["☁️ Stateless Multi-Cloud Foundation Models & GPU APIs"]
-        Vertex["Google Cloud Vertex AI\nGemini 3.1 Pro • Gemini 3.8 Flash\nGLM-5.2 MaaS (1M ctx) • text-embedding-004"]
-        Mistral["Mistral AI\nCodestral 2508 (256k) • Ministral 14B\ncodestral-embed"]
-        NIM["NVIDIA Developer NIM\nNemotron Ultra 550B / Super 120B\nDeepSeek v4 Flash • GPT-OSS 20B"]
-        OR["OpenRouter Fallback Mesh\nCohere North Code • Nex N2.5 Pro\nLing Flash VL"]
+    subgraph CloudProviders["Stateless Multi-Cloud Foundation Models & GPU APIs"]
+        Vertex["Google Cloud Vertex AI<br/>Gemini 4 Argon • Gemini 3.1 Pro • Gemini 3.8 Flash<br/>GLM-5.2 MaaS (1M ctx) • text-embedding-004"]:::cloud
+        Mistral["Mistral AI<br/>Codestral 2508 (256k) • Ministral 14B<br/>codestral-embed"]:::cloud
+        NIM["NVIDIA Developer NIM<br/>Nemotron Ultra 550B / Super 120B<br/>DeepSeek v4 Flash • GPT-OSS 20B"]:::cloud
+        OR["OpenRouter Fallback Mesh<br/>Cohere North Code • Nex N2.5 Pro<br/>Ling Flash VL"]:::cloud
     end
 
     Browser -->|"HTTP/HTTPS :8080 (Configured via .env)"| WebUI
