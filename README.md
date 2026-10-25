@@ -87,7 +87,7 @@ flowchart TB
     end
 
     Browser -->|"HTTP/HTTPS :8080 (Configured via .env)"| WebUI
-    WebUI <-->|"Persists 100% locally"| RAID
+    WebUI -->|"Persists 100% locally"| RAID
     WebUI -->|"1. Extract text/OCR"| Tika
     WebUI -->|"2. Tool call: cad_*"| CAD
     WebUI -->|"3. Chat & Embeddings (:4000/v1)"| ProxyChat
