@@ -55,43 +55,33 @@ This repository is not a theoretical tutorial—it is a **live, production-harde
 
 ```mermaid
 flowchart TB
-    classDef client fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    classDef hub fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
-    classDef proxy fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    classDef internal fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
-    classDef cloud fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
-
-    subgraph Clients["Enterprise & Home LAN Workstations"]
-        Browser["Web Browsers (All Workstations)<br/>Team Chat, Document RAG & CAD Uploads"]:::client
-        IDEs["Developer Workstations & VS Code Web (:9080)<br/>Cline • Roo Code • Aider • Continue"]:::client
+    subgraph Clients ["1. Enterprise & Home LAN Workstations"]
+        Browser["Web Browsers (All Workstations)<br/>Team Chat, Document RAG & CAD Uploads"]
+        IDEs["Developer Workstations & VS Code Web (9080)<br/>Cline, Roo Code, Aider & Continue"]
     end
 
-    subgraph Host["Self-Hosted Enterprise AI Server (Linux • Podman/Docker • Systemd Auto-Start)"]
-        WebUI["Open WebUI (:8080)<br/>Multi-User Chat, RBAC & Workspace Tools"]:::hub
-        RAID[("Local RAID-1 Storage<br/>webui.db • Private Uploads • Chat History")]:::hub
-
-        ProxyChat["Main LiteLLM Gateway (:4000)<br/>Open WebUI Chat • Search Grounding • RAG Embeddings"]:::proxy
-        ProxyAgents["Coding Agents LiteLLM Gateway (:4001)<br/>litellm-agents • Native Tool-Calling • Zero-Downtime"]:::proxy
-
-        subgraph InternalServices["Internal Domain & Document Microservices (private-ai-net)"]
-            Tika["Apache Tika (127.0.0.1:9998)<br/>OCR & Scanned PDF Extraction"]:::internal
-            CAD["cad-service (:8090 internal)<br/>FastAPI • libredwg • ezdxf • openpyxl"]:::internal
-        end
+    subgraph Host ["2. Self-Hosted Enterprise AI Server (Linux, Podman & Systemd)"]
+        WebUI["Open WebUI (Port 8080)<br/>Multi-User Chat, RBAC & Workspace Tools"]
+        RAID["Local RAID-1 Storage<br/>webui.db, Private Uploads & Chat History"]
+        ProxyChat["Main LiteLLM Gateway (Port 4000)<br/>Open WebUI Chat, Search Grounding & RAG"]
+        ProxyAgents["Coding Agents LiteLLM Gateway (Port 4001)<br/>litellm-agents - Native Tool-Calling & Zero-Downtime"]
+        Tika["Apache Tika (127.0.0.1:9998)<br/>Internal OCR & Scanned PDF Extraction"]
+        CAD["cad-service (Port 8090 Internal)<br/>FastAPI, libredwg, ezdxf & openpyxl"]
     end
 
-    subgraph CloudProviders["Stateless Multi-Cloud Foundation Models & GPU APIs"]
-        Vertex["Google Cloud Vertex AI<br/>Gemini 4 Argon • Gemini 3.1 Pro • Gemini 3.8 Flash<br/>GLM-5.2 MaaS (1M ctx) • text-embedding-004"]:::cloud
-        Mistral["Mistral AI<br/>Codestral 2508 (256k) • Ministral 14B<br/>codestral-embed"]:::cloud
-        NIM["NVIDIA Developer NIM<br/>Nemotron Ultra 550B / Super 120B<br/>DeepSeek v4 Flash • GPT-OSS 20B"]:::cloud
-        OR["OpenRouter Fallback Mesh<br/>Cohere North Code • Nex N2.5 Pro<br/>Ling Flash VL"]:::cloud
+    subgraph CloudProviders ["3. Stateless Multi-Cloud Foundation Models & GPU APIs"]
+        Vertex["Google Cloud Vertex AI<br/>Gemini 4 Argon, Gemini 3.1 Pro, Gemini 3.8 Flash<br/>GLM-5.2 MaaS (1M ctx) & text-embedding-004"]
+        Mistral["Mistral AI<br/>Codestral 2508 (256k) & Ministral 14B"]
+        NIM["NVIDIA Developer NIM<br/>Nemotron Ultra 550B & DeepSeek v4 Flash"]
+        OR["OpenRouter Fallback Mesh<br/>Cohere North Code & Nex N2.5 Pro"]
     end
 
-    Browser -->|"HTTP/HTTPS :8080 (Configured via .env)"| WebUI
+    Browser -->|"HTTP 8080 (.env)"| WebUI
     WebUI -->|"Persists 100% locally"| RAID
     WebUI -->|"1. Extract text/OCR"| Tika
-    WebUI -->|"2. Tool call: cad_*"| CAD
-    WebUI -->|"3. Chat & Embeddings (:4000/v1)"| ProxyChat
-    IDEs -->|"OpenAI API (:4001/v1 + LITELLM_MASTER_KEY)"| ProxyAgents
+    WebUI -->|"2. Tool call cad_*"| CAD
+    WebUI -->|"3. Chat & Embeddings"| ProxyChat
+    IDEs -->|"OpenAI API (Port 4001)"| ProxyAgents
 
     ProxyChat --> Vertex
     ProxyChat --> Mistral
@@ -102,6 +92,19 @@ flowchart TB
     ProxyAgents --> Mistral
     ProxyAgents --> NIM
     ProxyAgents --> OR
+
+    style Browser fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    style IDEs fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    style WebUI fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
+    style RAID fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
+    style ProxyChat fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
+    style ProxyAgents fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
+    style Tika fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
+    style CAD fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
+    style Vertex fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
+    style Mistral fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
+    style NIM fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
+    style OR fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
 ```
 
 ### 2. Sovereign Document RAG & CAD Reconciliation Flow
@@ -109,36 +112,32 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as 👤 Engineer / Analyst
-    participant UI as 💬 Open WebUI (:8080)
-    participant Tika as 📄 Apache Tika (:9998)
-    participant CAD as 📐 cad-service (:8090)
-    participant Proxy as 🔀 LiteLLM (:4000)
-    participant LLM as ☁️ Vertex AI / Mistral
+    participant User as Engineer or Analyst
+    participant UI as Open WebUI (8080)
+    participant Tika as Apache Tika (9998)
+    participant CAD as cad-service (8090)
+    participant Proxy as LiteLLM (4000)
+    participant LLM as Vertex AI and Mistral
 
-    rect rgb(240, 248, 255)
-        Note over User,LLM: Workflow A — Sovereign Document RAG (PDF / Scanned Docs)
-        User->>UI: Uploads scanned PDF + asks question
-        UI->>Tika: Extracts text via OCR (internal private-ai-net)
-        Tika-->>UI: Clean structured text (file stays on local RAID-1)
-        UI->>Proxy: Requests vector embeddings (text-embedding-004)
-        Proxy->>LLM: Stateless embedding API call
-        LLM-->>UI: 768-dim vectors indexed in local vector store
-        UI->>Proxy: Sends grounded prompt + retrieved chunks
-        Proxy->>LLM: Generates cited response
-        LLM-->>User: Grounded answer with document citations
-    end
+    Note over User,LLM: Workflow A - Sovereign Document RAG (PDF and Scanned Docs)
+    User->>UI: Uploads scanned PDF and asks question
+    UI->>Tika: Extracts text via OCR (internal private-ai-net)
+    Tika-->>UI: Clean structured text (file stays on local RAID-1)
+    UI->>Proxy: Requests vector embeddings (text-embedding-004)
+    Proxy->>LLM: Stateless embedding API call
+    LLM-->>UI: 768-dim vectors indexed in local vector store
+    UI->>Proxy: Sends grounded prompt and retrieved chunks
+    Proxy->>LLM: Generates cited response
+    LLM-->>User: Grounded answer with document citations
 
-    rect rgb(245, 255, 245)
-        Note over User,LLM: Workflow B — Automated AutoCAD (.dwg/.dxf) ⇄ Excel (.xlsx) Reconciliation
-        User->>UI: Attaches expropriation .dwg + reference .xlsx
-        UI->>Proxy: User prompt ("Reconcile parcel areas against Excel")
-        Proxy->>LLM: Invokes Open WebUI tool `cad_reconcile`
-        UI->>CAD: POST /reconcile (raw .dwg + .xlsx over internal DNS)
-        CAD->>CAD: dwg2dxf (libredwg) → ezdxf geometry → shapely areas → openpyxl diff
-        CAD-->>UI: Reconciliation report + downloadable .xlsx link
-        UI-->>User: Summary table (matches, discrepancies, missing parcels) + Excel download
-    end
+    Note over User,LLM: Workflow B - Automated AutoCAD (.dwg) and Excel (.xlsx) Reconciliation
+    User->>UI: Attaches expropriation .dwg and reference .xlsx
+    UI->>Proxy: Sends prompt to reconcile parcel areas against Excel
+    Proxy->>LLM: Invokes Open WebUI tool cad_reconcile
+    UI->>CAD: POST /reconcile over internal container DNS
+    CAD->>CAD: dwg2dxf to ezdxf geometry to shapely areas to openpyxl diff
+    CAD-->>UI: Reconciliation report and downloadable .xlsx link
+    UI-->>User: Summary table and reconciled Excel download
 ```
 
 ---
