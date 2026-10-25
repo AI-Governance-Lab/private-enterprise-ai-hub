@@ -54,34 +54,34 @@ This repository is not a theoretical tutorial—it is a **live, production-harde
 ### 1. End-to-End Enterprise AI Hub & Dual-Gateway Topology
 
 ```mermaid
-flowchart TB
-    subgraph Clients ["1. Enterprise & Home LAN Workstations"]
-        Browser["Web Browsers (All Workstations)<br/>Team Chat, Document RAG & CAD Uploads"]
-        IDEs["Developer Workstations & VS Code Web (9080)<br/>Cline, Roo Code, Aider & Continue"]
+graph TD
+    subgraph Clients["1. Enterprise and Home LAN Workstations"]
+        Browser["Web Browsers (All Workstations) - Team Chat, Document RAG and CAD Uploads"]
+        IDEs["Developer Workstations and VS Code Web (9080) - Cline, Roo Code, Aider"]
     end
 
-    subgraph Host ["2. Self-Hosted Enterprise AI Server (Linux, Podman & Systemd)"]
-        WebUI["Open WebUI (Port 8080)<br/>Multi-User Chat, RBAC & Workspace Tools"]
-        RAID["Local RAID-1 Storage<br/>webui.db, Private Uploads & Chat History"]
-        ProxyChat["Main LiteLLM Gateway (Port 4000)<br/>Open WebUI Chat, Search Grounding & RAG"]
-        ProxyAgents["Coding Agents LiteLLM Gateway (Port 4001)<br/>litellm-agents - Native Tool-Calling & Zero-Downtime"]
-        Tika["Apache Tika (127.0.0.1:9998)<br/>Internal OCR & Scanned PDF Extraction"]
-        CAD["cad-service (Port 8090 Internal)<br/>FastAPI, libredwg, ezdxf & openpyxl"]
+    subgraph Host["2. Self-Hosted Enterprise AI Server (Linux, Podman and Systemd)"]
+        WebUI["Open WebUI (Port 8080) - Multi-User Chat, RBAC and Workspace Tools"]
+        RAID["Local RAID-1 Storage - webui.db, Private Uploads and Chat History"]
+        ProxyChat["Main LiteLLM Gateway (Port 4000) - Open WebUI Chat and RAG Embeddings"]
+        ProxyAgents["Coding Agents LiteLLM Gateway (Port 4001) - Native Tool-Calling"]
+        Tika["Apache Tika (127.0.0.1:9998) - Internal OCR and Scanned PDF Extraction"]
+        CAD["cad-service (Port 8090 Internal) - FastAPI AutoCAD and Excel Engine"]
     end
 
-    subgraph CloudProviders ["3. Stateless Multi-Cloud Foundation Models & GPU APIs"]
-        Vertex["Google Cloud Vertex AI<br/>Gemini 4 Argon, Gemini 3.1 Pro, Gemini 3.8 Flash<br/>GLM-5.2 MaaS (1M ctx) & text-embedding-004"]
-        Mistral["Mistral AI<br/>Codestral 2508 (256k) & Ministral 14B"]
-        NIM["NVIDIA Developer NIM<br/>Nemotron Ultra 550B & DeepSeek v4 Flash"]
-        OR["OpenRouter Fallback Mesh<br/>Cohere North Code & Nex N2.5 Pro"]
+    subgraph CloudProviders["3. Stateless Multi-Cloud Foundation Models and GPU APIs"]
+        Vertex["Google Cloud Vertex AI - Gemini 4 Argon, Gemini 3.1 Pro, GLM-5.2 MaaS"]
+        Mistral["Mistral AI - Codestral 2508 (256k) and Ministral 14B"]
+        NIM["NVIDIA Developer NIM - Nemotron Ultra 550B and DeepSeek v4 Flash"]
+        OR["OpenRouter Fallback Mesh - Cohere North Code and Nex N2.5 Pro"]
     end
 
-    Browser -->|"HTTP 8080 (.env)"| WebUI
-    WebUI -->|"Persists 100% locally"| RAID
-    WebUI -->|"1. Extract text/OCR"| Tika
-    WebUI -->|"2. Tool call cad_*"| CAD
-    WebUI -->|"3. Chat & Embeddings"| ProxyChat
-    IDEs -->|"OpenAI API (Port 4001)"| ProxyAgents
+    Browser -->|HTTP 8080| WebUI
+    WebUI -->|Persists Locally| RAID
+    WebUI -->|1. Extract OCR| Tika
+    WebUI -->|2. Tool Call| CAD
+    WebUI -->|3. Chat and Embeddings| ProxyChat
+    IDEs -->|OpenAI API Port 4001| ProxyAgents
 
     ProxyChat --> Vertex
     ProxyChat --> Mistral
@@ -92,19 +92,6 @@ flowchart TB
     ProxyAgents --> Mistral
     ProxyAgents --> NIM
     ProxyAgents --> OR
-
-    style Browser fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style IDEs fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
-    style WebUI fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
-    style RAID fill:#1e293b,stroke:#06b6d4,stroke-width:2px,color:#f8fafc
-    style ProxyChat fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    style ProxyAgents fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#ffffff
-    style Tika fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
-    style CAD fill:#311042,stroke:#d946ef,stroke-width:2px,color:#ffffff
-    style Vertex fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
-    style Mistral fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
-    style NIM fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
-    style OR fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#e0e7ff
 ```
 
 ### 2. Sovereign Document RAG & CAD Reconciliation Flow
