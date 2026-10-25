@@ -687,14 +687,14 @@ This will:
 - Mount persistent storage for chat history
 - Install RapidOCR for enhanced image extraction (optional)
 
-### 5. (Recommended) Auto-Start Containers on Server Reboot
+### 5. (Recommended) Auto-Start Containers on Server Reboot (`systemd`)
 
-Create a systemd service to automatically start containers after reboot:
+Create two independent `systemd` services so both the **Main AI Hub (`private-ai.service`)** and the **Coding Agents Gateway (`litellm-agents.service`)** automatically start at Linux boot:
 
-**Create `/etc/systemd/system/private-ai.service`:**
+**A. Main AI Hub Service (`/etc/systemd/system/private-ai.service`):**
 ```ini
 [Unit]
-Description=Private AI Service (Open WebUI + LiteLLM + Tika)
+Description=Private AI Service (Open WebUI + LiteLLM + Tika + CAD)
 After=network-online.target
 Wants=network-online.target
 
@@ -705,23 +705,44 @@ User=root
 WorkingDirectory=/opt/private-ai-hub
 ExecStart=/opt/private-ai-hub/run.sh
 Restart=on-failure
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-**Enable the service:**
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable private-ai.service
-sudo systemctl start private-ai.service
+**B. Dedicated Coding Agents Service (`/etc/systemd/system/litellm-agents.service`):**
+```ini
+[Unit]
+Description=LiteLLM Coding Agents Gateway (litellm-agents)
+After=network-online.target
+Wants=network-online.target
 
-# Verify status
-sudo systemctl status private-ai.service
-docker ps  # Should show all 3 containers running
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=root
+WorkingDirectory=/opt/private-ai-hub/litellm-agents
+ExecStart=/opt/private-ai-hub/litellm-agents/run.sh
+ExecStop=/usr/bin/docker stop litellm-agents
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-**Now containers will automatically start after system reboot!**
+**Enable and start both services:**
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now private-ai.service litellm-agents.service
+
+# Verify status
+sudo systemctl status private-ai.service litellm-agents.service --no-pager
+docker ps  # Shows open-webui, litellm (:4000), litellm-agents (:4001), tika, and cad-service
+```
+
+**Now all containers automatically start after system reboot!**
 
 ### 6. Access the Application
 
