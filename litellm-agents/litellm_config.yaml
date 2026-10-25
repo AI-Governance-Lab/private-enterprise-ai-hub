@@ -1,0 +1,160 @@
+# =============================================================================
+# LiteLLM Agents Gateway Configuration (litellm-agents — Port 4001)
+# Dedicated to autonomous coding & IDE agents: Cline, Roo Code, Aider, Continue
+# =============================================================================
+# NOTE: Vertex AI Gemini models here omit `googleSearch: {}` grounding so native
+# agent tool-calling (read_files, editor, execute_command, etc.) never conflicts.
+
+model_list:
+  # ---------------------------------------------------------------------------
+  # Google Vertex AI Models (Agent Tool-Calling Ready)
+  # ---------------------------------------------------------------------------
+  - model_name: gemini-3.1-pro-preview
+    litellm_params:
+      model: vertex_ai/gemini-3.1-pro-preview
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  - model_name: gemini-3.8-flash
+    litellm_params:
+      model: vertex_ai/gemini-3.8-flash
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  - model_name: gemini-4-argon
+    litellm_params:
+      model: vertex_ai/gemini-4-argon
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  # Zhipu AI GLM-5.2 (Vertex AI MaaS - 1M context, agentic coding & reasoning)
+  - model_name: glm-5.2
+    litellm_params:
+      model: vertex_ai/zai-org/glm-5.2-maas
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  - model_name: text-embedding-004
+    litellm_params:
+      model: vertex_ai/text-embedding-004
+      vertex_project: "os.environ/GCP_PROJECT_ID"
+      vertex_location: "global"
+
+  # ---------------------------------------------------------------------------
+  # Mistral AI Models
+  # ---------------------------------------------------------------------------
+  - model_name: codestral-2508
+    litellm_params:
+      model: mistral/codestral-2508
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  - model_name: ministral-14b-latest
+    litellm_params:
+      model: mistral/ministral-14b-latest
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  - model_name: ministral-14b
+    litellm_params:
+      model: mistral/ministral-14b-latest
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  - model_name: codestral-embed
+    litellm_params:
+      model: mistral/codestral-embed
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  - model_name: mistral-embed
+    litellm_params:
+      model: mistral/mistral-embed
+      api_key: "os.environ/MISTRAL_API_KEY"
+
+  # ---------------------------------------------------------------------------
+  # OpenRouter Free Models
+  # ---------------------------------------------------------------------------
+  - model_name: cohere/north-mini-code:free
+    litellm_params:
+      model: openrouter/cohere/north-mini-code:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  - model_name: nex-agi/nex-n2.5-pro:free
+    litellm_params:
+      model: openrouter/nex-agi/nex-n2.5-pro:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  - model_name: inclusionai/ling-3.0-flash-vl:free
+    litellm_params:
+      model: openrouter/inclusionai/ling-3.0-flash-vl:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  - model_name: openrouter/free
+    litellm_params:
+      model: openrouter/openrouter/free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  - model_name: dots-studio/dots-3-note-preview:free
+    litellm_params:
+      model: openrouter/dots-studio/dots-3-note-preview:free
+      api_key: "os.environ/OPENROUTER_API_KEY"
+
+  # ---------------------------------------------------------------------------
+  # NVIDIA Developer NIM Models (integrate.api.nvidia.com)
+  # ---------------------------------------------------------------------------
+  - model_name: openai/gpt-oss-20b
+    litellm_params:
+      model: openai/openai/gpt-oss-20b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  - model_name: deepseek-ai/deepseek-v4-flash-0731
+    litellm_params:
+      model: openai/deepseek-ai/deepseek-v4-flash-0731
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  - model_name: nvidia/nemotron-3-ultra-550b-a55b
+    litellm_params:
+      model: openai/nvidia/nemotron-3-ultra-550b-a55b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  - model_name: nvidia/nemotron-3-super-120b-a12b
+    litellm_params:
+      model: openai/nvidia/nemotron-3-super-120b-a12b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  - model_name: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+    litellm_params:
+      model: openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  - model_name: meta/llama-3.2-11b-vision-instruct
+    litellm_params:
+      model: openai/meta/llama-3.2-11b-vision-instruct
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+  - model_name: nvidia/nemotron-3.5-lightning-30b-a3b
+    litellm_params:
+      model: openai/nvidia/nemotron-3.5-lightning-30b-a3b
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: "os.environ/NVIDIA_API_KEY"
+
+# -----------------------------------------------------------------------------
+# Gateway & Router Settings (Tuned for Autonomous Coding Agents)
+# -----------------------------------------------------------------------------
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+
+router_settings:
+  num_retries: 3
+  retry_after: 2
+  timeout: 300
+  model_group_alias:
+    "glm-5.2-maas": "glm-5.2"
+  fallbacks:
+    - {"cohere/north-mini-code:free": ["nex-agi/nex-n2.5-pro:free", "openrouter/free"]}
+    - {"nex-agi/nex-n2.5-pro:free": ["cohere/north-mini-code:free", "openrouter/free"]}
+    - {"inclusionai/ling-3.0-flash-vl:free": ["openrouter/free"]}

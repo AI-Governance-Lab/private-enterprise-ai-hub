@@ -1,0 +1,7 @@
+# Never commit real environment variables or credentials
+.env
+.env.*
+!.env.example
+credentials/
+*.json
+*.log

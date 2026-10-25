@@ -62,30 +62,39 @@ RAID_STORAGE="${DATA_STORAGE_PATH:-/mnt/raid1/podman-volumes/open-webui-data}"
 mkdir -p "$RAID_STORAGE"
 
 # Pinned image versions (bump these to upgrade)
-OPEN_WEBUI_IMAGE="ghcr.io/open-webui/open-webui:v0.12.3"
-LITELLM_IMAGE="ghcr.io/berriai/litellm:main-latest"
-TIKA_IMAGE="docker.io/apache/tika:latest"
+OPEN_WEBUI_IMAGE="${OPEN_WEBUI_IMAGE:-ghcr.io/open-webui/open-webui:v0.12.3}"
+LITELLM_IMAGE="${LITELLM_IMAGE:-ghcr.io/berriai/litellm:main-latest}"
+TIKA_IMAGE="${TIKA_IMAGE:-docker.io/apache/tika:latest}"
+
+# Network & Port bindings (loaded from .env with safe defaults)
+DOCKER_NETWORK="${DOCKER_NETWORK:-private-ai-net}"
+OPEN_WEBUI_BIND_IP="${OPEN_WEBUI_BIND_IP:-0.0.0.0}"
+OPEN_WEBUI_PORT="${OPEN_WEBUI_PORT:-8080}"
+LITELLM_BIND_IP="${LITELLM_BIND_IP:-0.0.0.0}"
+LITELLM_PORT="${LITELLM_PORT:-4000}"
+TIKA_BIND_IP="${TIKA_BIND_IP:-127.0.0.1}"
+TIKA_PORT="${TIKA_PORT:-9998}"
 
 # Optional CAD service (built locally from ./cad-service). Failure to build
 # or start it is non-fatal: the rest of the stack keeps running.
 CAD_SERVICE_IMAGE="cad-service:local"
 CAD_SERVICE_ENABLED="${CAD_SERVICE_ENABLED:-1}"
 
-echo "Setting up network..."
-docker network create private-ai-net 2>/dev/null || true
+echo "Setting up network ($DOCKER_NETWORK)..."
+docker network create "$DOCKER_NETWORK" 2>/dev/null || true
 
 echo "Pulling latest images..."
 docker pull "$OPEN_WEBUI_IMAGE"
 docker pull "$LITELLM_IMAGE"
 docker pull "$TIKA_IMAGE"
 
-echo "Starting LiteLLM (Vertex AI & Mistral Proxy)..."
+echo "Starting LiteLLM (Vertex AI & Mistral Proxy) on ${LITELLM_BIND_IP}:${LITELLM_PORT}..."
 docker rm -f litellm 2>/dev/null || true
 docker run -d \
     --name litellm \
-    --network private-ai-net \
+    --network "$DOCKER_NETWORK" \
     --restart unless-stopped \
-    -p 4000:4000 \
+    -p "${LITELLM_BIND_IP}:${LITELLM_PORT}:4000" \
     -v $(pwd)/litellm_config.yaml:/app/config.yaml:ro \
     -v $(pwd)/"$GCP_CREDENTIALS_FILE":/app/credentials.json:ro \
     -e GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json \
@@ -99,29 +108,29 @@ docker run -d \
 
 echo "Waiting for LiteLLM to be ready..."
 for i in $(seq 1 45); do
-    if curl -fsS http://127.0.0.1:4000/health/liveliness >/dev/null 2>&1; then
+    if curl -fsS "http://127.0.0.1:${LITELLM_PORT}/health/liveliness" >/dev/null 2>&1; then
         break
     fi
     sleep 1
 done
 
-echo "Starting Apache Tika (OCR / PDF extraction)..."
+echo "Starting Apache Tika (OCR / PDF extraction) on ${TIKA_BIND_IP}:${TIKA_PORT}..."
 docker rm -f tika 2>/dev/null || true
 docker run -d \
     --name tika \
-    --network private-ai-net \
+    --network "$DOCKER_NETWORK" \
     --restart unless-stopped \
-    -p 127.0.0.1:9998:9998 \
+    -p "${TIKA_BIND_IP}:${TIKA_PORT}:9998" \
     "$TIKA_IMAGE"
 
-echo "Starting Open WebUI (with RAID storage at $RAID_STORAGE)..."
+echo "Starting Open WebUI (with RAID storage at $RAID_STORAGE) on ${OPEN_WEBUI_BIND_IP}:${OPEN_WEBUI_PORT}..."
 docker rm -f open-webui 2>/dev/null || true
 
 docker run -d \
     --name open-webui \
-    --network private-ai-net \
+    --network "$DOCKER_NETWORK" \
     --restart unless-stopped \
-    -p 8080:8080 \
+    -p "${OPEN_WEBUI_BIND_IP}:${OPEN_WEBUI_PORT}:8080" \
     -v $RAID_STORAGE:/app/backend/data \
     -e CONTENT_EXTRACTION_ENGINE=tika \
     -e TIKA_SERVER_URL=http://tika:9998 \
@@ -156,7 +165,7 @@ if [ "$CAD_SERVICE_ENABLED" = "1" ] && [ -f "cad-service/Dockerfile" ]; then
         docker rm -f cad-service 2>/dev/null || true
         if docker run -d \
             --name cad-service \
-            --network private-ai-net \
+            --network "$DOCKER_NETWORK" \
             --restart unless-stopped \
             -e MAX_UPLOAD_MB=500 \
             "$CAD_SERVICE_IMAGE" >/tmp/cad-run.log 2>&1; then
@@ -178,7 +187,8 @@ echo "✅ Open WebUI, LiteLLM and Tika started successfully!"
 echo "✅ RAG data stored on RAID at: $RAID_STORAGE"
 echo "✅ Models available: Gemini 3.1 Pro Preview, Gemini 3.8 Flash, Codestral (codestral-2508), Ministral 14B"
 echo "ℹ️  CAD service status: $CAD_SERVICE_STATUS  (see CAD_README.md)"
-echo "Access the beautiful interface at: http://localhost:8080"
+echo "Access the beautiful interface at: http://localhost:${OPEN_WEBUI_PORT}"
+
 echo "It might take a minute for Open WebUI to fully start."
 echo "To view logs:"
 echo "  Open WebUI:  docker logs -f open-webui"
