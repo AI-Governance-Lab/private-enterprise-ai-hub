@@ -1676,3 +1676,14 @@ Profitez de votre assistant IA privé ! 🤖
 - **16-Sep-2026 :** (ou la date actuelle) J'ai synchronisé et complètement intégré les nouveaux outils `CAD Tools (v0.3.0)` pour le support XLSX avec un téléchargement propre.
 
 - **06-Sep-2026 :** J'ai synchronisé et complètement intégré les nouveaux outils `CAD Tools (v0.3.0)` pour une prise en charge native de XLSX dans Open WebUI avec un téléchargement propre.
+
+---
+
+## 🔗 Écosystème Connecté AI Governance Lab (Plateformes K3s)
+
+Les passerelles centralisées **`litellm` (`:4000`)** et **`litellm-agents` (`:4001`)** de ce dépôt constituent l'épine dorsale IA multi-cloud de l'ensemble du portefeuille **AI Governance Lab** :
+
+1. **[`quantum-biomed-research-engine`](https://github.com/AI-Governance-Lab/quantum-biomed-research-engine)** (`K3s NodePort :30089`) — R&D pharmaceutique et clinique GxP, anonymisation HIPAA PHI, consensus 3x Multi-Judge, criblage moléculaire quantique VQE (`SMILES` $\to$ $\Delta G$), FinOps par étude clinique et registre cryptographique SHA-256 **FDA 21 CFR Part 11**.
+2. **[`governed-quantum-agents`](https://github.com/AI-Governance-Lab/governed-quantum-agents)** (`K3s NodePort :30088`) — Plateforme Venus de découverte quantique en langage naturel (Google Cirq & IBM Qiskit : VQE, QAOA, Grover, QSVM) avec audit indépendant LLM-as-Judge.
+3. **[`nvidia-nim-enterprise-patterns`](https://github.com/AI-Governance-Lab/nvidia-nim-enterprise-patterns)** — Infrastructure GPU Spot L4/T4 éphémère sur GCP (Terraform) et déploiements K3s TensorRT-LLM / NVIDIA NIM.
+
