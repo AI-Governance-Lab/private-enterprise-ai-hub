@@ -1822,6 +1822,16 @@ Enjoy your private AI assistant! 🤖
 
 ---
 
+## 🔗 Connected AI Governance Lab Ecosystem (Downstream K3s Platforms)
+
+The centralized **`litellm` (`:4000`)** and **`litellm-agents` (`:4001`)** gateways in this repository act as the unified multi-cloud AI backbone for the entire **AI Governance Lab** portfolio:
+
+1. **[`quantum-biomed-research-engine`](https://github.com/AI-Governance-Lab/quantum-biomed-research-engine)** (`K3s NodePort :30089`) — Regulated Pharmaceutical R&D, HIPAA PHI De-Identification, 3x Concurrent GxP Multi-Judge Consensus, Hybrid Quantum VQE Drug Screener (`SMILES` $\to$ $\Delta G$), Clinical Study Grant FinOps, and FDA 21 CFR Part 11 SHA-256 Cryptographic Ledger.
+2. **[`governed-quantum-agents`](https://github.com/AI-Governance-Lab/governed-quantum-agents)** (`K3s NodePort :30088`) — Venus Natural-Language Quantum Discovery Platform (Google Cirq & IBM Qiskit: VQE, QAOA, Grover, QSVM) with independent LLM-as-Judge governance.
+3. **[`nvidia-nim-enterprise-patterns`](https://github.com/AI-Governance-Lab/nvidia-nim-enterprise-patterns)** — Ephemeral GCP Spot L4/T4 GPU Terraform & K3s TensorRT-LLM / NVIDIA NIM deployment patterns.
+
+---
+
 ## 👨‍💻 Maintainer & Author
 
 **Marian Ropota** — *Hands-On AI/ML & Cloud Platform Architect | Hybrid Cloud Infrastructure, LLMOps & Agentic Engineering*  
