@@ -1798,6 +1798,6 @@ Bucură-te de asistentul tău AI privat! 🤖
 
 Gateway-urile centralizate **`litellm` (`:4000`)** și **`litellm-agents` (`:4001`)** din acest repository servesc drept coloană vertebrală AI multi-cloud pentru întregul portofoliu **AI Governance Lab**:
 
-1. **[`quantum-biomed-research-engine`](https://github.com/AI-Governance-Lab/quantum-biomed-research-engine)** (`K3s NodePort :30089`) — Cercetare Farmaceutică & Clinică GxP, de-identificare HIPAA PHI, consens 3x Multi-Judge, screening molecular cuantic VQE (`SMILES` $\to$ $\Delta G$), FinOps pe granturi de studii clinice și registru criptografic SHA-256 **FDA 21 CFR Part 11**.
+1. **[`quantum-biomed-research-engine`](https://github.com/AI-Governance-Lab/quantum-biomed-research-engine)** (`K3s NodePort :30089`) — Cercetare Farmaceutică & Clinică GxP, de-identificare HIPAA PHI, consens 3x Multi-Judge, screening molecular cuantic VQE (`SMILES → ΔG kcal/mol`), FinOps pe granturi de studii clinice și registru criptografic SHA-256 **FDA 21 CFR Part 11**.
 2. **[`governed-quantum-agents`](https://github.com/AI-Governance-Lab/governed-quantum-agents)** (`K3s NodePort :30088`) — Platforma Venus pentru descoperire cuantică în limbaj natural (Google Cirq & IBM Qiskit: VQE, QAOA, Grover, QSVM) cu audit independent LLM-as-Judge.
 3. **[`nvidia-nim-enterprise-patterns`](https://github.com/AI-Governance-Lab/nvidia-nim-enterprise-patterns)** — Infrastructură efemeră GCP Spot GPU L4/T4 (Terraform) și containere K3s TensorRT-LLM / NVIDIA NIM.
